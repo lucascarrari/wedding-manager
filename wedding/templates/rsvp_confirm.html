@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Confirmar presença</title>
+
+  {% load static %}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'wedding/css/rsvp.css' %}">
+</head>
+<body>
+  <div class="rsvp-page">
+    <div class="rsvp-card">
+
+      <div class="rsvp-header">
+        <h1>Confirmação de Presença</h1>
+        <p class="subtitle">
+          Olá, <strong>{{ guest.name }}</strong>. <br>
+          Confirme sua presença no casamento de
+          <strong>Lucas &amp; Marcelly</strong>.
+        </p>
+      </div>
+
+      <form method="POST" class="rsvp-form">
+        {% csrf_token %}
+
+        <div class="form-grid">
+          <div class="form-group full-width">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+          </div>
+
+          <div class="form-group full-width">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+          </div>
+
+          <div class="form-group full-width">
+            {{ form.companions_count.label_tag }}
+            {{ form.companions_count }}
+            <small class="help-text">
+              Informe quantas pessoas vão acompanhar você.
+            </small>
+          </div>
+        </div>
+
+        <div class="companions-section">
+          <h2>Acompanhantes</h2>
+          <p class="companions-subtitle">
+            Preencha apenas os nomes necessários.
+          </p>
+
+          <div id="companions-wrapper" class="form-grid">
+            <div class="form-group companion-field" data-index="1">
+              {{ form.companion_1.label_tag }}
+              {{ form.companion_1 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="2">
+              {{ form.companion_2.label_tag }}
+              {{ form.companion_2 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="3">
+              {{ form.companion_3.label_tag }}
+              {{ form.companion_3 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="4">
+              {{ form.companion_4.label_tag }}
+              {{ form.companion_4 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="5">
+              {{ form.companion_5.label_tag }}
+              {{ form.companion_5 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="6">
+              {{ form.companion_6.label_tag }}
+              {{ form.companion_6 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="7">
+              {{ form.companion_7.label_tag }}
+              {{ form.companion_7 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="8">
+              {{ form.companion_8.label_tag }}
+              {{ form.companion_8 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="9">
+              {{ form.companion_9.label_tag }}
+              {{ form.companion_9 }}
+            </div>
+
+            <div class="form-group companion-field" data-index="10">
+              {{ form.companion_10.label_tag }}
+              {{ form.companion_10 }}
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-primary" type="submit">Confirmar presença</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="{% static 'wedding/js/rsvp.js' %}"></script>
+</body>
+</html>

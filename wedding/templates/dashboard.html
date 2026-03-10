@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Painel do Casamento</title>
+
+    {% load static %} {% load br_filters %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="{% static 'wedding/css/dashboard.css' %}" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <div class="dashboard-page">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <p class="eyebrow">Painel dos noivos</p>
+
+          <h1>Lucas & Marcelly</h1>
+
+          <p class="header-subtitle">
+            Acompanhe confirmações, convidados e finanças do casamento em um só
+            lugar.
+          </p>
+        </div>
+
+        <div class="header-right">
+          <div class="top-info-row">
+            <div class="countdown-card">
+              <span class="countdown-label">Contagem regressiva</span>
+
+              <div class="countdown-value" id="timer">0d 00h 00m 00s</div>
+            </div>
+
+            <div class="wedding-date-card">
+              <span class="countdown-label">Data do casamento</span>
+
+              <div class="wedding-date-value">29/09/2029</div>
+            </div>
+          </div>
+
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Sair</button>
+          </form>
+        </div>
+      </header>
+
+      <section class="cards">
+        <div class="card">
+          <h3>Total convidados</h3>
+          <p>{{ total_guests }}</p>
+        </div>
+
+        <div class="card">
+          <h3>Convites respondidos</h3>
+          <p>{{ confirmed_main_guests }}</p>
+        </div>
+
+        <div class="card">
+          <h3>Pessoas confirmadas</h3>
+          <p>{{ confirmed_people_total }}</p>
+        </div>
+
+        <div class="card">
+          <h3>Despesas pendentes</h3>
+          <p>R$ {{ total_pending|br_money }}</p>
+        </div>
+
+        <div class="card">
+          <h3>Taxa de confirmação</h3>
+          <p>{{ confirmation_rate }}%</p>
+        </div>
+
+        <div class="card">
+          <h3>Despesas totais</h3>
+          <p>R$ {{ total_expenses|br_money }}</p>
+        </div>
+      </section>
+
+      <section class="charts-row">
+        <section class="chart-box">
+          <h2>Financeiro</h2>
+
+          <p class="chart-caption">
+            Comparativo entre valores pagos e pendentes.
+          </p>
+
+          <div class="chart-canvas">
+            <canvas id="financeChart"></canvas>
+          </div>
+        </section>
+
+        <section class="chart-box">
+          <h2>Confirmações</h2>
+
+          <p class="chart-caption">
+            Presenças confirmadas versus não confirmadas.
+          </p>
+
+          <div class="chart-canvas">
+            <canvas id="guestChart"></canvas>
+          </div>
+        </section>
+      </section>
+
+      <section class="chart-box chart-wide">
+        <h2>Despesas por categoria</h2>
+
+        <p class="chart-caption">
+          Veja onde o orçamento está sendo distribuído.
+        </p>
+
+        <div class="chart-canvas chart-canvas-wide">
+          <canvas id="categoryChart"></canvas>
+        </div>
+      </section>
+
+     <section class="guest-panel">
+
+  <div class="guest-panel-header">
+    <div>
+      <h2>Convidados</h2>
+      <p class="chart-caption">
+        Gerencie convidados, acompanhe confirmações e envie o link RSVP.
+      </p>
+    </div>
+
+    <button type="button" class="add-guest-btn" id="openGuestFormBtn">
+      Adicionar convidado
+    </button>
+  </div>
+
+  <div class="guest-form-wrapper hidden" id="guestFormWrapper">
+    <form method="post" action="{% url 'add_guest' %}" class="guest-form">
+      {% csrf_token %}
+
+      <div class="guest-form-grid">
+        <div class="form-group">
+          <label for="{{ guest_form.name.id_for_label }}">Nome:</label>
+          {{ guest_form.name }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ guest_form.email.id_for_label }}">E-mail:</label>
+          {{ guest_form.email }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ guest_form.phone.id_for_label }}">Telefone:</label>
+          {{ guest_form.phone }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ guest_form.guest_type.id_for_label }}">Tipo:</label>
+          {{ guest_form.guest_type }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ guest_form.invited_by.id_for_label }}">Convidado por:</label>
+          {{ guest_form.invited_by }}
+        </div>
+
+        <div class="form-group full-width">
+          <label for="{{ guest_form.notes.id_for_label }}">Observações:</label>
+          {{ guest_form.notes }}
+        </div>
+      </div>
+
+      <div class="guest-form-actions">
+        <button type="submit" class="save-guest-btn">Salvar convidado</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="guest-table-wrapper">
+    <table class="guest-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Lado</th>
+          <th>Status</th>
+          <th>Acompanhantes</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for row in guest_rows %}
+          <tr>
+            <td>{{ row.guest.name }}</td>
+            <td>{{ row.guest.get_guest_type_display }}</td>
+            <td>{{ row.guest.get_invited_by_display }}</td>
+
+            <td>
+              {% if row.guest.confirmed %}
+                <span class="status-badge confirmed">Confirmado</span>
+              {% else %}
+                <span class="status-badge pending">Pendente</span>
+              {% endif %}
+            </td>
+
+            <td class="companions-cell">
+              {% if row.companions_count > 0 %}
+                <button
+                  type="button"
+                  class="companions-toggle"
+                  data-target="companions-{{ row.guest.id }}"
+                >
+                  {{ row.companions_count }} acompanhante{{ row.companions_count|pluralize }}
+                </button>
+              {% else %}
+                <span class="no-companions">Nenhum</span>
+              {% endif %}
+            </td>
+
+            <td>
+              <div class="table-actions">
+                <button
+                  type="button"
+                  class="table-btn edit-btn"
+                  data-target="edit-guest-{{ row.guest.id }}"
+                >
+                  Editar
+                </button>
+
+                {% if row.whatsapp_url %}
+                  <a
+                    href="{{ row.whatsapp_url }}"
+                    target="_blank"
+                    class="table-btn primary-btn"
+                  >
+                    Enviar confirmação
+                  </a>
+                {% else %}
+                  <a
+                    href="{{ row.rsvp_url }}"
+                    target="_blank"
+                    class="table-btn secondary-btn"
+                  >
+                    Abrir RSVP
+                  </a>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+
+          <tr class="companions-row hidden-row" id="companions-{{ row.guest.id }}">
+            <td colspan="6">
+              <div class="companions-content">
+                <strong>Acompanhantes:</strong>
+                <ul>
+                  {% for companion in row.guest.companions.all %}
+                    <li>{{ companion.name }}</li>
+                  {% empty %}
+                    <li>Sem acompanhantes cadastrados.</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </td>
+          </tr>
+
+          <tr class="edit-row hidden-row" id="edit-guest-{{ row.guest.id }}">
+            <td colspan="6">
+              <div class="edit-guest-content">
+                <form method="post" action="{% url 'edit_guest' row.guest.id %}" class="guest-form">
+                  {% csrf_token %}
+
+                  <div class="guest-form-grid">
+                    <div class="form-group">
+                      <label for="{{ row.edit_form.name.id_for_label }}">Nome:</label>
+                      {{ row.edit_form.name }}
+                    </div>
+
+                    <div class="form-group">
+                      <label for="{{ row.edit_form.email.id_for_label }}">E-mail:</label>
+                      {{ row.edit_form.email }}
+                    </div>
+
+                    <div class="form-group">
+                      <label for="{{ row.edit_form.phone.id_for_label }}">Telefone:</label>
+                      {{ row.edit_form.phone }}
+                    </div>
+
+                    <div class="form-group">
+                      <label for="{{ row.edit_form.guest_type.id_for_label }}">Tipo:</label>
+                      {{ row.edit_form.guest_type }}
+                    </div>
+
+                    <div class="form-group">
+                      <label for="{{ row.edit_form.invited_by.id_for_label }}">Convidado por:</label>
+                      {{ row.edit_form.invited_by }}
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                      <label for="{{ row.edit_form.confirmed.id_for_label }}">Confirmado:</label>
+                      <div class="checkbox-field">
+                        {{ row.edit_form.confirmed }}
+                      </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                      <label for="{{ row.edit_form.notes.id_for_label }}">Observações:</label>
+                      {{ row.edit_form.notes }}
+                    </div>
+                  </div>
+
+                  <div class="guest-form-actions">
+                    <button type="submit" class="save-guest-btn">Salvar alterações</button>
+                  </div>
+                </form>
+              </div>
+            </td>
+          </tr>
+
+        {% empty %}
+          <tr>
+            <td colspan="6" class="empty-table">
+              Nenhum convidado cadastrado ainda.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</section>
+    </div>
+
+    {{ category_labels|json_script:"category-labels" }} 
+    {{ category_values|json_script:"category-values" }}
+
+    <script>
+      window.DASHBOARD_DATA = {
+        totalPaid: Number("{{ total_paid }}"),
+        totalPending: Number("{{ total_pending }}"),
+        confirmedGuests: Number("{{ confirmed_guests }}"),
+        notConfirmed: Number("{{ not_confirmed }}"),
+        weddingDate: "{{ wedding_date }}",
+      };
+    </script>
+
+    <script src="{% static 'wedding/js/dashboard.js' %}"></script>
+  </body>
+</html>

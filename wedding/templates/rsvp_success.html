@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Presença confirmada</title>
+
+  {% load static %}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'wedding/css/rsvp-success.css' %}">
+</head>
+<body>
+  <div class="success-page">
+    <div class="success-card">
+
+      <div class="success-icon">💍</div>
+
+      <h1>Presença confirmada!</h1>
+
+      <p class="guest-name">
+        Obrigado, <strong>{{ guest.name }}</strong>.
+      </p>
+
+      <p class="message">
+        Ficamos muito felizes em saber que você estará conosco
+        nesse dia tão especial.
+      </p>
+
+      <p class="message secondary">
+        Sua confirmação foi registrada com sucesso em nosso sistema.
+      </p>
+
+      <div class="actions">
+        <a href="{% url 'home' %}" class="btn-primary">Voltar para a home</a>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

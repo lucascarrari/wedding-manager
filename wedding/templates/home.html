@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ couple_names }}</title>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'wedding/css/home.css' %}">
+</head>
+
+<body>
+
+  <header class="top">
+    
+    <div class="monogram">
+  <img src="{% static 'wedding/img/monograma.png' %}" alt="Monograma">
+</div>
+    
+    <div class="names">{{ couple_names }}</div>
+    <div class="subtitle">Nosso grande dia está chegando</div>
+  </header>
+
+  <main class="hero">
+    <div class="hero-card">
+
+      <div class="photo">
+        <!-- Coloque sua foto em: wedding/static/wedding/img/casal.jpg -->
+        <img src="{% static 'wedding/img/casal.jpg' %}" alt="Lucas & Marcelly">
+      </div>
+
+      <div class="countdown">
+        <div class="count-title">Contagem regressiva</div>
+
+        <div class="clock">
+          <div class="time-box">
+            <div class="num" id="days">0</div>
+            <div class="lbl">Dias</div>
+          </div>
+          <div class="time-box">
+            <div class="num" id="hours">0</div>
+            <div class="lbl">Horas</div>
+          </div>
+          <div class="time-box">
+            <div class="num" id="minutes">0</div>
+            <div class="lbl">Min</div>
+          </div>
+          <div class="time-box">
+            <div class="num" id="seconds">0</div>
+            <div class="lbl">Seg</div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+            <a class="btn" href="{% url 'public_rsvp' %}">Confirmar presença</a>
+            <a class="btn secondary-btn" href="{% url 'login' %}">Entrar no painel</a>
+</div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>Lucas & Marcelly • Wedding Manager</span>
+  </footer>
+
+  <script>
+    window.HOME_DATA = {
+      weddingDate: "{{ wedding_date }}"
+    };
+  </script>
+  <script src="{% static 'wedding/js/home.js' %}"></script>
+
+</body>
+</html>

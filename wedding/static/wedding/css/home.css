@@ -1,0 +1,159 @@
+:root{
+  --bg: #f5f7e5;           /* off-white */
+  --olive: #4f6b4f;        /* verde oliva */
+  --olive-dark: #314a33;
+  --card: #ffffff;
+  --shadow: 0 12px 30px rgba(0,0,0,0.10);
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--olive-dark);
+}
+
+.top{
+  text-align:center;
+  padding: 44px 16px 18px;
+}
+
+.monogram{
+  display:flex;
+  justify-content:center;
+  margin-bottom:10px;
+}
+
+.monogram img{
+  width:150px;
+  height:auto;
+}
+
+.names{
+  margin-top: 10px;
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.subtitle{
+  margin-top: 8px;
+  opacity: 0.85;
+}
+
+.hero{
+  padding: 18px 16px 50px;
+  display:flex;
+  justify-content:center;
+}
+
+.hero-card{
+  width: min(1040px, 96vw);
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 22px;
+  padding: 22px;
+}
+
+.photo{
+  border-radius: 14px;
+  overflow:hidden;
+  background: #e9edd6;
+  min-height: 340px;
+}
+
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+
+.countdown{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding: 6px 8px;
+}
+
+.count-title{
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--olive);
+  margin-bottom: 14px;
+}
+
+.clock{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.time-box{
+  background: #f7f9ef;
+  border: 1px solid rgba(79,107,79,0.18);
+  border-radius: 14px;
+  text-align:center;
+  padding: 14px 10px;
+}
+
+.num{
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--olive-dark);
+}
+
+.lbl{
+  font-size: 12px;
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+.btn{
+  display:inline-block;
+  text-decoration:none;
+  text-align:center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--olive);
+  color: white;
+  font-weight: 800;
+}
+
+.btn-group{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:20px;
+}
+
+.secondary-btn{
+  background:#ffffff;
+  color: var(--olive-dark);
+  border: 1px solid rgba(79,107,79,0.30);
+}
+
+.btn:hover{
+  filter: brightness(0.95);
+}
+
+.footer{
+  text-align:center;
+  padding: 24px 16px 32px;
+  opacity: 0.75;
+}
+
+@media (max-width: 900px){
+  .hero-card{
+    grid-template-columns: 1fr;
+  }
+  .photo{
+    min-height: 280px;
+  }
+}
